@@ -18,6 +18,7 @@
  */
 package org.pdfsam.ui.selection.multiple;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -73,5 +74,11 @@ public final class SelectionTableRowData {
     public Set<PageRange> toPageRangeSet() throws ConversionException {
         return ConversionUtils.toPageRangeSet(pageSelection.get());
     }
-
+    
+    /**
+     * @return the {@link PageRange} selection list if any, an empty list otherwise.
+     */
+    public List<PageRange> toPageRangeList() throws ConversionException {
+        return ConversionUtils.toPageRangeList(pageSelection.get());
+    }
 }
