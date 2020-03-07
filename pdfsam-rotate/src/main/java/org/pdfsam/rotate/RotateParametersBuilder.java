@@ -52,7 +52,16 @@ class RotateParametersBuilder extends AbstractPdfOutputParametersBuilder<BulkRot
         if (isNull(pageSelection) || pageSelection.isEmpty()) {
             this.inputs.add(new PdfRotationInput(source, rotation, predefinedRotationType));
         } else {
-            this.inputs.add(new PdfRotationInput(source, rotation, pageSelection.stream().toArray(PageRange[]::new)));
+            Set<PageRange> filteredSetOfPages = new NullSafeSet<>();
+            for (PageRange eachPageRange : pageSelection) {
+                for (int page = eachPageRange.getStart(); page <= eachPageRange.getEnd(); page++) {
+                    if (predefinedRotationType.includes(page)) {
+                        filteredSetOfPages.add(new PageRange(page, page));
+                    }
+                }
+            }
+            this.inputs
+                    .add(new PdfRotationInput(source, rotation, filteredSetOfPages.stream().toArray(PageRange[]::new)));
         }
     }
 
