@@ -20,7 +20,9 @@ package org.pdfsam.merge;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.pdfsam.i18n.DefaultI18nContext;
@@ -32,8 +34,11 @@ import org.pdfsam.ui.selection.multiple.LongColumn;
 import org.pdfsam.ui.selection.multiple.MultipleSelectionPane;
 import org.pdfsam.ui.selection.multiple.PageRangesColumn;
 import org.pdfsam.ui.selection.multiple.SelectionTableColumn;
+import org.sejda.common.collection.NullSafeSet;
 import org.sejda.conversion.exception.ConversionException;
+import org.sejda.model.input.PdfFileSource;
 import org.sejda.model.input.PdfMergeInput;
+import org.sejda.model.pdf.page.PageRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,9 +62,21 @@ public class MergeSelectionPane extends MultipleSelectionPane
     @Override
     public void apply(MergeParametersBuilder builder, Consumer<String> onError) {
         try {
-            table().getItems().stream().filter(s -> !Objects.equals("0", trim(s.pageSelection.get())))
-                    .map(i -> new PdfMergeInput(i.descriptor().toPdfFileSource(), i.toPageRangeSet()))
-                    .forEach(builder::addInput);
+            for (int item = 0; item < table().getItems().size(); item++) {
+                List<PageRange> pageRangeList = table().getItems().get(item).toPageRangeList();                
+                if (pageRangeList.size() == 0) {
+                    Set<PageRange> nullPageRange = new NullSafeSet<>();
+                    PdfFileSource pdfFile = table().getItems().get(item).descriptor().toPdfFileSource();
+                    builder.addInput(new PdfMergeInput(pdfFile, nullPageRange));
+                } else {
+                    for (PageRange eachPageRange :  pageRangeList) {
+                        Set<PageRange> setOfOnePageRange = new NullSafeSet<>();
+                        PdfFileSource pdfFile = table().getItems().get(item).descriptor().toPdfFileSource();
+                        setOfOnePageRange.add(eachPageRange);
+                        builder.addInput(new PdfMergeInput(pdfFile, setOfOnePageRange));
+                    }
+                }
+            }
             if (!builder.hasInput()) {
                 onError.accept(DefaultI18nContext.getInstance().i18n("No PDF document has been selected"));
             }
