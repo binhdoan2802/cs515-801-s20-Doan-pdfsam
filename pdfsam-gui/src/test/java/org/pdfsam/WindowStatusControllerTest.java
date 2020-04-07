@@ -72,10 +72,10 @@ public class WindowStatusControllerTest extends ApplicationTest {
     @Test
     public void defaultOnDisableRestore() {
         when(service.getLatestStatus()).thenReturn(new StageStatus(10, 10, 10, 10));
-        System.setProperty(WindowStatusController.PDFSAM_DISABLE_UI_RESTORE, Boolean.TRUE.toString());
+        System.setProperty("org.pdfsam.disable.ui.restore", Boolean.TRUE.toString());
         victim.setStage(victimStage);
         clickOn("show").sleep(200);
         assertTrue(victimStage.isMaximized());
-        System.setProperty(WindowStatusController.PDFSAM_DISABLE_UI_RESTORE, Boolean.FALSE.toString());
+        System.setProperty("org.pdfsam.disable.ui.restore", Boolean.FALSE.toString());
     }
 }

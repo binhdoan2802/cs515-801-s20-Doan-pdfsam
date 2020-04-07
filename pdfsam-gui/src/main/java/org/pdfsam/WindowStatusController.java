@@ -41,7 +41,7 @@ import javafx.stage.Stage;
 @Auto
 class WindowStatusController {
     private static final Logger LOG = LoggerFactory.getLogger(WindowStatusController.class);
-    public static final String PDFSAM_DISABLE_UI_RESTORE = "org.pdfsam.disable.ui.restore";
+    private static final String PDFSAM_DISABLE_UI_RESTORE = "org.pdfsam.disable.ui.restore";
 
     private Stage stage;
     private StageService service;
