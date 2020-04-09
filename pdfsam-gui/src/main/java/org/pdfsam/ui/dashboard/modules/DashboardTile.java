@@ -20,6 +20,8 @@ package org.pdfsam.ui.dashboard.modules;
 
 import static java.util.Objects.nonNull;
 
+import org.pdfsam.ui.support.Style;
+
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.css.PseudoClass;
@@ -53,7 +55,7 @@ class DashboardTile extends VBox {
         Label textLabel = new Label(description);
         textLabel.getStyleClass().add("dashboard-modules-tile-text");
         textLabel.setMinHeight(USE_PREF_SIZE);
-        VBox topTile = new VBox(5);
+        VBox topTile = new VBox(Style.DEFAULT_SPACING);
         topTile.getChildren().addAll(titleLabel, textLabel);
 
         button.getStyleClass().add("dashboard-modules-invisible-button");
